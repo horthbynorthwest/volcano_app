@@ -24,7 +24,8 @@ fg = folium.FeatureGroup(name="My Map")
 # to add multiple we have to add them one at a time... helloo for loops!
 # seeing as we're iterating over more than one list at the same time we need to use zip!
 for lat, lon, name, el in zip(lat, lon, name, elev):
-    fg.add_child(folium.Marker(location=[lat, lon], popup=str(name)+" "+str(el)+" m", icon=folium.Icon(color=colour_producer(el))))
+    fg.add_child(folium.CircleMarker(location=[lat, lon], radius=6, popup=str(name)+" "+str(el)+" m",
+    fill_color=colour_producer(el), fill = True, fill_opacity=0.8, color='grey'))
 map.add_child(fg)
 
 
