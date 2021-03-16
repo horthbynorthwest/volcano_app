@@ -20,14 +20,22 @@ map = folium.Map(location=[38.95, -104.94], zoom_start=5, tiles = "Stamen Terrai
 # this is the way to add a child. However, for more control we want to use feature groups.
 # map.add_child(folium.Marker(location=[46.00, 9.18], popup="I'm a Marker", icon=folium.Icon(color="green")))
 
-fg = folium.FeatureGroup(name="My Map")
+fg = folium.FeatureGroup(name="USA Volcanoes")
 # to add multiple we have to add them one at a time... helloo for loops!
 # seeing as we're iterating over more than one list at the same time we need to use zip!
 for lat, lon, name, el in zip(lat, lon, name, elev):
     fg.add_child(folium.CircleMarker(location=[lat, lon], radius=6, popup=str(name)+" "+str(el)+" m",
     fill_color=colour_producer(el), fill = True, fill_opacity=0.8, color='grey'))
-map.add_child(fg)
 
+pop = folium.FeatureGroup(name="Population")
+
+pop.add_child(folium.GeoJson(data=open('world.json', 'r', encoding='utf-8-sig').read(),
+style_function=lambda x: { 'fillColor':'green' if x['properties']['POP2005'] < 10000000 
+else 'orange' if 10000000 <= x['properties']['POP2005'] < 20000000 else 'red'}))
+
+map.add_child(fg)
+map.add_child(pop)
+map.add_child(folium.LayerControl())
 
 map.save("VolcanoesMap.html")
 
